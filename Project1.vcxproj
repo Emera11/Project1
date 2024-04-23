@@ -159,6 +159,7 @@
   <ItemGroup>
     <ClInclude Include="Header\Game.h" />
     <ClInclude Include="Header\Global.h" />
+    <ClInclude Include="Header\Math\Fader.h" />
     <ClInclude Include="Header\Math\Vector2D.h" />
     <ClInclude Include="Header\Keyboard.h" />
     <ClInclude Include="Header\Player\Player.h" />

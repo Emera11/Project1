@@ -3,6 +3,7 @@
 #include "./Header/Global.h"
 #include "Header/Game.h"
 
+
 const char* g_TITLE = "Untitled";
 Game* gp_Game;
 
@@ -28,7 +29,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
     gp_Game = new Game();
     gp_Game->Init();
- 
+    
+  
 
     while (ProcessMessage() == 0)
     {
