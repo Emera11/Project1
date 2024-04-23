@@ -1,6 +1,8 @@
 #pragma once
-template<typename T>  //Template
+#include <stdio.h>
+#include <math.h>
 
+template<typename T>  //Template
 struct Vector2D{
     T x;
     T y;
@@ -24,7 +26,7 @@ struct Vector2D{
 
     //ƒxƒNƒgƒ‹‚Ì’·‚³
     const float Length() const {
-        return std::sqrt(Dot(*this));
+        return sqrt(Dot(*this));
     }
 
     inline const Vector2D Normalize() const;
