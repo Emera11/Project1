@@ -35,12 +35,12 @@ void Game::Init(void)
 void Game::Update(void)
 {
 	gp_Key->KeyUpdate();
-	gp_Title->Update(gp_Key);
-	//gp_Player->Operation(gp_Key);
+	//gp_Title->Update(gp_Key);
+	gp_Player->Operation(gp_Key);
 }
 
 void Game::Draw(void)
 {
-	//gp_Player->Render();
-	gp_Title->Render();
+	gp_Player->Render();
+	//gp_Title->Render();
 }
