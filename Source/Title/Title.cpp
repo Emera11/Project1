@@ -79,7 +79,7 @@ namespace
             ++Subject_Frame;
             Subject_Frame_Adjust = 0;
         }
-        if (Subject_Frame == MaxFrame - 1) {
+        if (Subject_Frame == MaxFrame - 1) { 
             Subject_Frame = 0;
         }
         ++Subject_Frame_Adjust;
