@@ -8,7 +8,7 @@ namespace
     constexpr int g_MAP_HEIGHT = 480;
     //ブロック一個あたりのサイズ
     constexpr int g_BLOCK_SIZE_X = 30;                           // 一つのチップのサイズ
-    constexpr int g_BLOCK_SIZE_Y = 34;                           // 一つのチップのサイズ
+    constexpr int g_BLOCK_SIZE_Y = 34;                            // 一つのチップのサイズ
 
         //マップのブロックの個数
     constexpr int g_MAP_ONE_BLOCK_NUM_X = (g_MAP_WIDTH  / 32);     // マップの横幅
