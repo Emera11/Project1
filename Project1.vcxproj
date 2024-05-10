@@ -151,19 +151,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Header\Stage\Stage.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Source\Player\Player.cpp" />
     <ClCompile Include="Source\Title\Title.cpp" />
+    <ClCompile Include="Header\Stage\Stage1_1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header\Game.h" />
     <ClInclude Include="Header\Global.h" />
+    <ClInclude Include="Header\Math\Debug.h" />
     <ClInclude Include="Header\Math\Fader.h" />
     <ClInclude Include="Header\Math\Vector2D.h" />
     <ClInclude Include="Header\Keyboard.h" />
     <ClInclude Include="Header\Player\Player.h" />
+    <ClInclude Include="Header\Stage\Stage.h" />
     <ClInclude Include="Header\Title\Title.h" />
+    <ClInclude Include="Header\Stage\Stage1_1.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

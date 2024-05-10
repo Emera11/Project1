@@ -1,5 +1,6 @@
-#include <DxLib.h>
-#include <iostream>
+
+#include "../../Header/Math/Debug.h"
+#include "../../Header/Global.h"
 #include "../../Header/Player/Player.h"
 #include "../../Header/Keyboard.h"
 
@@ -21,7 +22,7 @@ namespace
     int g_Jump_image[g_JUMP_MAXFRAME];
     int g_Run_image[g_RUN_MAXFRAME];
     int g_Throw_image[g_THROW_MAXFRAME];
-    bool g_CanJump = TRUE;
+ 
     bool g_Reverse = FALSE;
     bool g_Throw_flag = FALSE;
     bool g_Idle_flag = TRUE;
@@ -29,12 +30,31 @@ namespace
     int   g_Frame = 0;
     int   g_Frame_adjust = 0;
     
+    //プレイヤーが移動できる距離
+    constexpr int g_PLAYER_MOVE_MAX = (g_WIN_WIDTH - 44) / 2;
+    constexpr int g_PLAYER_MOVE_MIN = 300;
+    
+    bool g_Scroll_flag_R = false;
+    bool g_Scroll_flag_L = false;
+    bool g_Scroll_flag_Dash = false;
+
+    constexpr float g_JUMP_Y_MAX = 2.000f;
+    float g_Timmy_Change_Y = 0.0f;
+    int g_Jump_time1 = 0;
+    int g_Jump_time2 = 0;
+    double g_Jump_All_time = 0.0;
+    float g_Landing_Count = 0.0f;
+    float g_Jump_X = 0.0f;
+    float g_Jump_MAX_X = 0.0f;
     //関数
 
+    
 }
 
 void Player::init(void)
 {
+    debug.Init();
+
     LoadDivGraph(g_TIMMY_WALK_PATH.c_str(), g_WALK_MAXFRAME, 2, 19, 64, 64, g_Walk_image);
     if (g_Walk_image[0] == -1)
     {
@@ -85,6 +105,21 @@ void Player::init(void)
 
 }
 
+bool Player::GetScroll_Flag_R()
+{
+    return g_Scroll_flag_R;
+}
+
+bool Player::GetScroll_Flag_L()
+{
+    return g_Scroll_flag_L;
+}
+
+bool Player::GetScroll_Flag_Dash()
+{
+    return g_Scroll_flag_Dash;
+}
+
 void Player::End(void)
 {
     
@@ -109,221 +144,17 @@ void Player::Operation(Keyboard* Key)
     m_Frame_Adjust_Check(3, g_Run_image);
     m_Frame_Adjust_Check(3, g_Throw_image);
 
-    /*
-    if (Frame_adjust == 3 && m_Now_Timmy == g_Idle_image) {
-        Frame++;
-        Frame_adjust = 0;
-    }
+ 
 
-    if (Frame_adjust == 3 && m_Now_Timmy == g_Walk_image) {
-        Frame++;
-        Frame_adjust = 0;
-    }
-
-    if (Frame_adjust == 3 && m_Now_Timmy == g_Jump_image) {
-        Frame++;
-        Frame_adjust = 0;
-    }
-
-    if (Frame_adjust == 3 && m_Now_Timmy == g_Run_image) {
-        Frame++;
-        Frame_adjust = 0;
-    }
-
-    if (Frame_adjust == 3 && m_Now_Timmy == g_Throw_image) {
-        Frame++;
-        Frame_adjust = 0;
-    }*/
-
-
-
-    // 右キーを押しているとき + Shift
-    /*if (Key->KeyDown(KEY_INPUT_LSHIFT) && Key->KeyDown(KEY_INPUT_RIGHT)) {
-
-        g_Reverse = FALSE;
-        g_Throw_flag = FALSE;
-        if (g_Anim_switch != 3)
-        {
-            m_X_Move_Speed = 2.0f;
-            g_Frame = 0;
-            g_Anim_switch = 3;
-            g_Frame_adjust = 0;
-
-        }
-
-        if (g_Frame == g_RUN_MAXFRAME - 1)
-        {
-            g_Frame = 0;
-        }
-
-        // プレイヤーを右に移動させる
-        m_Timmy_Pos.x += m_X_Move_Speed;
-
-    }
-
-
-
-    // 左キーを押しているとき + Shift
-    else if (Key->KeyDown(KEY_INPUT_LSHIFT) && Key->KeyDown(KEY_INPUT_LEFT)) {
-
-        g_Reverse = TRUE;
-        g_Throw_flag = FALSE;
-        if (g_Anim_switch != 3)
-        {
-            m_X_Move_Speed = -2.0f;
-            g_Frame = 0;
-            g_Anim_switch = 3;
-            g_Frame_adjust = 0;
-
-        }
-
-        if (g_Frame == g_RUN_MAXFRAME - 1)
-        {
-            g_Frame = 0;
-        }
-
-        // プレイヤーを右に移動させる
-        m_Timmy_Pos.x += m_X_Move_Speed;
-
-
-    }
-
-    // 左キーで左に移動
-    else if (Key->KeyDown(KEY_INPUT_LEFT)) {
-        g_Reverse = TRUE;
-        g_Throw_flag = FALSE;
-        if (g_Anim_switch != 1)
-        {
-            m_X_Move_Speed = -1.0f;
-            g_Frame = 0;
-            g_Anim_switch = 1;
-            g_Frame_adjust = 0;
-        }
-
-        if (g_Frame == g_WALK_MAXFRAME - 1)
-        {
-            g_Frame = 0;
-        }
-        m_Timmy_Pos.x += m_X_Move_Speed;
-    }
-
-
-
-
-
-    // 右キーを押しているとき
-    else if (CheckHitKey(KEY_INPUT_RIGHT)) {
-
-        g_Reverse = FALSE;
-        g_Throw_flag = FALSE;
-
-        if (g_Anim_switch != 1)
-        {
-            m_X_Move_Speed = 1.0f;
-            g_Frame = 0;
-            g_Anim_switch = 1;
-            g_Frame_adjust = 0;
-
-        }
-
-        if (g_Frame == g_WALK_MAXFRAME - 1)
-        {
-            g_Frame = 0;
-        }
-
-        // プレイヤーを右に移動させる
-        m_Timmy_Pos.x += m_X_Move_Speed;
-
-    }*/
-
-    /*
-    else if (CheckHitKey(KEY_INPUT_Z)) {
-
-        g_Throw_flag = TRUE;
-        if (g_Anim_switch != 4)
-        {
-            g_Frame = 0;
-            g_Anim_switch = 4;
-            g_Frame_adjust = 0;
-        }
-
-        else if (g_Frame == g_THROW_MAXFRAME - 1)
-        {
-            g_Frame = 0;
-        }
-    }
-
-    else if (g_Throw_flag)
-    {
-        if (g_Anim_switch != 4)
-        {
-            g_Frame = 0;
-            g_Anim_switch = 4;
-            g_Frame_adjust = 0;
-        }
-
-        else if (g_Frame == g_THROW_MAXFRAME - 1)
-        {
-            g_Frame = 0;
-            g_Throw_flag = FALSE;
-        }
-    }*/
-
-
-
-    // スペースキーでジャンプ
-
-    /*else if (CheckHitKey(KEY_INPUT_SPACE))
-    {
-
-        g_Throw_flag = FALSE;
-        if (g_CanJump)
-        {
-            m_Jumping_Power = -10.0;
-            g_CanJump = FALSE;
-        }
-    }
-
-    else if (!g_CanJump && m_Timmy_Pos.y <= m_Glound_y)
-    {
-        if (g_Anim_switch != 2)
-        {
-            g_Frame = 0;
-            g_Anim_switch = 2;
-            g_Frame_adjust = 0;
-        }
-
-        if (g_Frame == g_JUMP_MAXFRAME - 1)
-        {
-            g_Frame = 0;
-        }
-
-    }
-
-    else
-    {
-        if (g_Anim_switch != 0)
-        {
-            g_Frame = 0;
-            g_Anim_switch = 0;
-            g_Frame_adjust = 0;
-        }
-
-        if (g_Frame == g_IDLE_MAXFRAME - 1)
-        {
-            g_Frame = 0;
-        }
-        g_Anim_switch = 0;
-    }*/
-    
-
-    if (!g_Idle_flag && g_Throw_flag == FALSE && g_CanJump == TRUE)
+    if (!g_Idle_flag && !g_Throw_flag && !m_CanJump)
     {
         g_Idle_flag = TRUE;
     }
+
     m_XMove_Key(Key);
     m_Jump_Key(Key);
     m_Throw_Key(Key);
+
     if(g_Idle_flag) {
         if (g_Anim_switch != 0)
         {
@@ -348,55 +179,8 @@ void Player::Operation(Keyboard* Key)
     m_Anim_Switch_Check(3, g_Run_image, g_RUN_MAXFRAME);
     m_Anim_Switch_Check(4, g_Throw_image, g_THROW_MAXFRAME);
 
-    /*
-    if (g_Anim_switch == 0 && m_Now_Timmy != Idle_image)
-    {
-        m_Now_Timmy = Idle_image;
-        m_Now_Timmy_Max_Frame = &Idle_MaxFrame;
-    }
-    else if (Anim_switch == 1 && Now_Timmy != Walk_image)
-    {
-        Now_Timmy = Walk_image;
-        Now_Timmy_Max_Frame = &Walk_MaxFrame;
-    }
-    else if (Anim_switch == 2 && Now_Timmy != Jump_image)
-    {
-        Now_Timmy = Jump_image;
-        Now_Timmy_Max_Frame = &Jump_MaxFrame;
-    }
+ 
 
-
-    else if (Anim_switch == 3 && Now_Timmy != Run_image)
-    {
-        Now_Timmy = Run_image;
-        Now_Timmy_Max_Frame = &Run_MaxFrame;
-    }
-
-    else if (Anim_switch == 4 && Now_Timmy != Throw_image)
-    {
-        Now_Timmy = Throw_image;
-        Now_Timmy_Max_Frame = &Throw_MaxFrame;
-    }*/
-
-
-    if (!g_CanJump)
-    {
-
-        float y_tmp = m_Timmy_Pos.y;
-        m_Timmy_Pos.y += (m_Timmy_Pos.y - m_Timmy_PosY_Prev) + m_Jumping_Power;
-        m_Timmy_PosY_Prev = y_tmp;
-        m_Jumping_Power = 0.3f;
-
-    }
-
-
-
-
-
-    if (m_Timmy_Pos.y >= m_Glound_y)
-    {
-        g_CanJump = TRUE;
-    }
 
 
 }
@@ -404,7 +188,18 @@ void Player::Operation(Keyboard* Key)
 
 void Player::Render(void) const
 {
-    DrawRotaGraphF(m_Timmy_Pos.x, m_Timmy_Pos.y, 2.0, 0.0, m_Now_Timmy[g_Frame], TRUE, g_Reverse, FALSE);
+    g_Landing_Count = m_Timmy_Pos.y - g_Timmy_Change_Y;
+    g_Jump_MAX_X = m_Timmy_Pos.x - g_Jump_X;
+
+    debug.Add(std::to_string(m_Timmy_Pos.x));
+    debug.Add(std::to_string(m_Timmy_Pos.y));
+    debug.Add(std::to_string(g_Timmy_Change_Y));
+    debug.Add(std::to_string(g_Landing_Count));
+
+
+    DrawRotaGraphF(m_Timmy_Pos.x+g_Jump_X, m_Timmy_Pos.y-g_Timmy_Change_Y, 2.0, 0.0, m_Now_Timmy[g_Frame], TRUE, g_Reverse, FALSE);
+    DrawBox(Player_HitBox.Hit_Box.left, Player_HitBox.Hit_Box.top - g_Timmy_Change_Y, Player_HitBox.Hit_Box.right, Player_HitBox.Hit_Box.bottom - g_Timmy_Change_Y, 100, FALSE);
+    debug.Update();
 }
 
 void Player::m_Frame_Adjust_Check(int Frame_Adjust, int* NowTimmy)
@@ -417,9 +212,17 @@ void Player::m_Frame_Adjust_Check(int Frame_Adjust, int* NowTimmy)
 
 void Player::m_XMove_Key(Keyboard* Key)
 {
+     if(g_Scroll_flag_R || g_Scroll_flag_L || g_Scroll_flag_Dash)
+    {
+        g_Scroll_flag_R = false;
+        g_Scroll_flag_L = false;
+        g_Scroll_flag_Dash = false;
+    }
+
     // 右キーを押しているとき + Shift
     if (CheckHitKey(KEY_INPUT_LSHIFT)) {
 
+        g_Scroll_flag_Dash = true;
         if (CheckHitKey(KEY_INPUT_RIGHT))
         {
             g_Idle_flag = FALSE;
@@ -439,7 +242,17 @@ void Player::m_XMove_Key(Keyboard* Key)
             }
 
             // プレイヤーを右に移動させる
-            m_Timmy_Pos.x += 2.0f;
+            if (g_PLAYER_MOVE_MAX >= m_Timmy_Pos.x)
+            {
+                m_Timmy_Pos.x += 2.0f;
+                Player_HitBox.Hit_Box.right += 2;
+                Player_HitBox.Hit_Box.left += 2;
+            }
+            else
+            {
+                g_Scroll_flag_R = true;
+            }
+
         }
 
 
@@ -462,7 +275,16 @@ void Player::m_XMove_Key(Keyboard* Key)
             }
 
             // プレイヤーを右に移動させる
-            m_Timmy_Pos.x -= 2.0f;
+            if (g_PLAYER_MOVE_MIN <= m_Timmy_Pos.x)
+            {
+                m_Timmy_Pos.x -= 2.0f;
+                Player_HitBox.Hit_Box.right -= 2;
+                Player_HitBox.Hit_Box.left  -= 2;
+            }
+            else
+            {
+                g_Scroll_flag_L = true;
+            }
         }
     }
 
@@ -482,7 +304,17 @@ void Player::m_XMove_Key(Keyboard* Key)
         {
             g_Frame = 0;
         }
-        m_Timmy_Pos.x -= 1.0f;
+        // プレイヤーを右に移動させる
+        if (g_PLAYER_MOVE_MIN <= m_Timmy_Pos.x)
+        {
+            m_Timmy_Pos.x -= 1.0f;
+            Player_HitBox.Hit_Box.right -= 1;
+            Player_HitBox.Hit_Box.left  -= 1;
+        }
+        else
+        {
+            g_Scroll_flag_L = true;
+        }
     }
 
     // 右キーを押しているとき
@@ -505,27 +337,39 @@ void Player::m_XMove_Key(Keyboard* Key)
         }
 
         // プレイヤーを右に移動させる
-        m_Timmy_Pos.x += 1.0f;
-
+        if (g_PLAYER_MOVE_MAX >= m_Timmy_Pos.x)
+        {
+            m_Timmy_Pos.x += 1.0f;
+            Player_HitBox.Hit_Box.right += 1;
+            Player_HitBox.Hit_Box.left  += 1;
+        }
+        else
+        {
+            g_Scroll_flag_R = true;
+        }
     }
+
+ 
 
 }
 
 void Player::m_Jump_Key(Keyboard* Key)
 {
-    if (Key->KeyDown(KEY_INPUT_SPACE) && g_CanJump)
+  
+
+    if (Key->KeyClick(KEY_INPUT_SPACE) && !m_CanJump)
     {
         g_Idle_flag = FALSE;
+        //g_Reverse = FALSE;
         g_Throw_flag = FALSE;
-        if (g_CanJump)
-        {
-            m_Jumping_Power = -12.0*m_Jumping_Power_weight;
-            g_CanJump = FALSE;
-        }
+        g_Jump_time1 = GetNowCount();           //time1にエンターが押された時の時間を格納
+        m_CanJump = true;                          //飛び上がりフラグを立てる。
     }
 
-    else if (!g_CanJump && m_Timmy_Pos.y <= m_Glound_y)
+
+    else if (m_CanJump)
     {
+        
         if (g_Anim_switch != 2)
         {
             g_Frame = 0;
@@ -535,10 +379,27 @@ void Player::m_Jump_Key(Keyboard* Key)
 
         if (g_Frame == g_JUMP_MAXFRAME - 1)
         {
+            g_Frame = g_JUMP_MAXFRAME - 2;
+        }
+
+        g_Jump_time2 = GetNowCount();                  // 現在経過時間を得る
+        g_Jump_All_time = (double)(g_Jump_time2 - g_Jump_time1) / 1000.000;  // ミリ秒を秒に変換して、エンターが押されてからの経過時間を計算
+        
+       
+
+       
+
+        g_Timmy_Change_Y = (float)((sqrt(1.500 * g_G * g_JUMP_Y_MAX) * g_Jump_All_time - 0.500 * g_G * g_Jump_All_time * g_Jump_All_time) * 480 / g_JUMP_Y_MAX);//y座標を計算
+
+        if (g_Landing_Count > m_Timmy_Pos.y)
+        {
+            g_Timmy_Change_Y = 0;
             g_Frame = 0;
+            m_CanJump = false;
         }
     }
 
+  
 }
 
 void Player::m_Throw_Key(Keyboard* Key)
