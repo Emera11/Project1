@@ -9,7 +9,28 @@
 class Debug {
     std::vector<std::string> List; //描画する項目
     int FontHandle; //描画するフォント
+    
+    
 public:
+    int Debug_Kun_X = 0;
+    int Debug_Kun_Y = 0;
+
+    void Debug_Kun_Init(int X, int Y)
+    {
+        Debug_Kun_X = X;
+        Debug_Kun_Y = Y;
+    }
+
+    void Debug_Kun_Update(int X, int Y)
+    {
+        Debug_Kun_X += X;
+        Debug_Kun_Y += Y;
+    }
+
+    void Debug_Kun_Draw()
+    {
+        DrawLine(Debug_Kun_X, Debug_Kun_Y, Debug_Kun_X, 860, 200);
+    }
     void Init() { //フォントを使用しない場合はいらない
         FontHandle = CreateFontToHandle("ＭＳゴシック", 16, 2);
     }

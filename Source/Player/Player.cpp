@@ -43,9 +43,11 @@ namespace
     int g_Jump_time1 = 0;
     int g_Jump_time2 = 0;
     double g_Jump_All_time = 0.0;
-    float g_Landing_Count = 0.0f;
+    //float g_Landing_Count = 0.0f;
     float g_Jump_X = 0.0f;
     float g_Jump_MAX_X = 0.0f;
+
+    float g_Gravity = 9.8f;
     //関数
 
     
@@ -54,6 +56,7 @@ namespace
 void Player::init(void)
 {
     debug.Init();
+    //debug.Debug_Kun_Init(m_Timmy_Pos.x, m_Timmy_Pos.y);
 
     LoadDivGraph(g_TIMMY_WALK_PATH.c_str(), g_WALK_MAXFRAME, 2, 19, 64, 64, g_Walk_image);
     if (g_Walk_image[0] == -1)
@@ -118,6 +121,11 @@ bool Player::GetScroll_Flag_L()
 bool Player::GetScroll_Flag_Dash()
 {
     return g_Scroll_flag_Dash;
+}
+
+bool Player::GetJump_Flag()
+{
+    return m_CanJump;
 }
 
 void Player::End(void)
@@ -185,22 +193,29 @@ void Player::Operation(Keyboard* Key)
 
 }
 
+ 
 
-void Player::Render(void) const
+void Player::Render(void)
 {
-    g_Landing_Count = m_Timmy_Pos.y - g_Timmy_Change_Y;
+    m_Landing_Count = m_Timmy_Pos.y - g_Timmy_Change_Y;
     g_Jump_MAX_X = m_Timmy_Pos.x - g_Jump_X;
+    m_Timmy_ALL_Pos.x = m_Timmy_Pos.x;
+    m_Timmy_ALL_Pos.y = m_Timmy_Pos.y - g_Timmy_Change_Y;
 
     debug.Add(std::to_string(m_Timmy_Pos.x));
     debug.Add(std::to_string(m_Timmy_Pos.y));
     debug.Add(std::to_string(g_Timmy_Change_Y));
-    debug.Add(std::to_string(g_Landing_Count));
-
-
-    DrawRotaGraphF(m_Timmy_Pos.x+g_Jump_X, m_Timmy_Pos.y-g_Timmy_Change_Y, 2.0, 0.0, m_Now_Timmy[g_Frame], TRUE, g_Reverse, FALSE);
+    //debug.Add(std::to_string(Player_HitBox.Hit_Check_flag));    
+    debug.Add(std::to_string(debug.Debug_Kun_X));
+    debug.Add(std::to_string(debug.Debug_Kun_Y));
+    debug.Add(std::to_string(Player_HitBox.Hit_Check_flag));
+    debug.Add(std::to_string(m_Landing_Count));    
+    
+    DrawRotaGraphF(m_Timmy_ALL_Pos.x, m_Timmy_Pos.y-g_Timmy_Change_Y, 2.0, 0.0, m_Now_Timmy[g_Frame], TRUE, g_Reverse, FALSE);
     DrawBox(Player_HitBox.Hit_Box.left, Player_HitBox.Hit_Box.top - g_Timmy_Change_Y, Player_HitBox.Hit_Box.right, Player_HitBox.Hit_Box.bottom - g_Timmy_Change_Y, 100, FALSE);
     debug.Update();
 }
+
 
 void Player::m_Frame_Adjust_Check(int Frame_Adjust, int* NowTimmy)
 {
@@ -310,11 +325,13 @@ void Player::m_XMove_Key(Keyboard* Key)
             m_Timmy_Pos.x -= 1.0f;
             Player_HitBox.Hit_Box.right -= 1;
             Player_HitBox.Hit_Box.left  -= 1;
+            
         }
         else
         {
             g_Scroll_flag_L = true;
         }
+        debug.Debug_Kun_X -= 1;
     }
 
     // 右キーを押しているとき
@@ -342,15 +359,17 @@ void Player::m_XMove_Key(Keyboard* Key)
             m_Timmy_Pos.x += 1.0f;
             Player_HitBox.Hit_Box.right += 1;
             Player_HitBox.Hit_Box.left  += 1;
+            
         }
         else
         {
             g_Scroll_flag_R = true;
         }
+        debug.Debug_Kun_X += 1;
     }
 
- 
-
+    
+  
 }
 
 void Player::m_Jump_Key(Keyboard* Key)
@@ -391,7 +410,7 @@ void Player::m_Jump_Key(Keyboard* Key)
 
         g_Timmy_Change_Y = (float)((sqrt(1.500 * g_G * g_JUMP_Y_MAX) * g_Jump_All_time - 0.500 * g_G * g_Jump_All_time * g_Jump_All_time) * 480 / g_JUMP_Y_MAX);//y座標を計算
 
-        if (g_Landing_Count > m_Timmy_Pos.y)
+        if (m_Landing_Count > m_Timmy_Pos.y)
         {
             g_Timmy_Change_Y = 0;
             g_Frame = 0;

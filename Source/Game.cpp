@@ -47,7 +47,7 @@ void Game::Update(void)
 	gp_Key->KeyUpdate();
 	//gp_Title->Update(gp_Key);
 	gp_Player->Operation(gp_Key);
-	gp_Stage1_1->Update(gp_Player->GetScroll_Flag_R(), gp_Player->GetScroll_Flag_L(),gp_Player->GetScroll_Flag_Dash());
+	gp_Stage1_1->Update(gp_Player->GetScroll_Flag_R(), gp_Player->GetScroll_Flag_L(),gp_Player->GetScroll_Flag_Dash(), gp_Player->Player_HitBox, gp_Player->m_Timmy_Pos, gp_Player->m_Timmy_ALL_Pos,gp_Player->GetJump_Flag());
 }
 
 void Game::Draw(void)
