@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Loop.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Source\Player\Player.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Header\Keyboard.h" />
     <ClInclude Include="Header\Player\Player.h" />
     <ClInclude Include="Header\Title\Title.h" />
+    <ClInclude Include="Loop.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

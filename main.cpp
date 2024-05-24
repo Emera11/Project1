@@ -1,11 +1,9 @@
 #include <DxLib.h>
 #include <math.h>
 #include "./Header/Global.h"
-#include "Header/Game.h"
 
 
 const char* g_TITLE = "Untitled";
-Game* gp_Game;
 
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
@@ -27,8 +25,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
     if (DxLib_Init() == -1) { return -1; }
 
-    gp_Game = new Game();
-    gp_Game->Init();
     
   
 
@@ -39,20 +35,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
         SetDrawScreen(DX_SCREEN_BACK);//描画先を裏画面に
 
 
-        gp_Game->Update();
-        gp_Game->Draw();
-
-
 
         ScreenFlip();//裏画面を表画面にコピー
-        if (CheckHitKey(KEY_INPUT_ESCAPE) == 1) { break; }
         
         
     }
 
-
-    delete gp_Game;
-    gp_Game = 0;
     DxLib_End();
     return 0;
 }
