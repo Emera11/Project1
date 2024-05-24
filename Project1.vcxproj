@@ -151,12 +151,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Operation.cpp" />
+    <ClCompile Include="Pl.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Source\Player\Player.cpp" />
     <ClCompile Include="Source\Title\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Global.h" />
     <ClInclude Include="Header\Game.h" />
     <ClInclude Include="Header\Global.h" />
     <ClInclude Include="Header\Math\Fader.h" />
@@ -164,6 +168,9 @@
     <ClInclude Include="Header\Keyboard.h" />
     <ClInclude Include="Header\Player\Player.h" />
     <ClInclude Include="Header\Title\Title.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Operation.h" />
+    <ClInclude Include="Pl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,11 +1,11 @@
 #include <DxLib.h>
 #include <math.h>
-#include "./Header/Global.h"
-#include "Header/Game.h"
-
+#include "Global.h"
+#include "Map.h"
+#include "Operation.h"
+#include "./Header/Keyboard.h"
 
 const char* g_TITLE = "Untitled";
-Game* gp_Game;
 
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
@@ -27,9 +27,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
     if (DxLib_Init() == -1) { return -1; }
 
-    gp_Game = new Game();
-    gp_Game->Init();
-    
+    Map* MAP = new Map();
+    Operation* OPERATION = new Operation(16, 16);
+    Keyboard* KEY = new Keyboard();
+    MAP->Init();
+    OPERATION->Init();
   
 
     while (ProcessMessage() == 0)
@@ -38,11 +40,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
         ClearDrawScreen();//裏画面消す
         SetDrawScreen(DX_SCREEN_BACK);//描画先を裏画面に
 
-
-        gp_Game->Update();
-        gp_Game->Draw();
-
-
+        KEY->KeyUpdate();
+   
+        MAP->Update();
+        MAP->Render(OPERATION->Plx, OPERATION->Ply, OPERATION->m_Scroll);
+        OPERATION->Update(&MAP->scroll, MAP->m_Map_Data, KEY);
+        OPERATION->Draw();
 
         ScreenFlip();//裏画面を表画面にコピー
         if (CheckHitKey(KEY_INPUT_ESCAPE) == 1) { break; }
@@ -51,8 +54,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
     }
 
 
-    delete gp_Game;
-    gp_Game = 0;
     DxLib_End();
     return 0;
 }
