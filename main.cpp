@@ -1,10 +1,11 @@
 #include <DxLib.h>
 #include <math.h>
 #include "./Header/Global.h"
+#include "./Loop.h"
 
 
 const char* g_TITLE = "Untitled";
-
+Loop* gp_Loop = new Loop();
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
@@ -28,7 +29,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
     
   
 
-    while (ProcessMessage() == 0)
+    while (ProcessMessage() == 0 && gp_Loop->Pad_Read() == FALSE)
     {
      
         ClearDrawScreen();//ó†âÊñ è¡Ç∑
