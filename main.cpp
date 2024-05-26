@@ -16,7 +16,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
     SetWaitVSyncFlag(TRUE); // 垂直同期する
     SetUseTransColor(FALSE);
     SetAlwaysRunFlag(TRUE);
-    //SetOutApplicationLogValidFlag(FALSE);	// ログテキスト出力しない
+    SetOutApplicationLogValidFlag(FALSE);	// ログテキスト出力しない
     SetDoubleStartValidFlag(TRUE); 
     SetWindowSizeChangeEnableFlag(TRUE);
     SetMainWindowClassName("NankaSugoiGame");
@@ -28,13 +28,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
     
   
-
+    gp_Loop->Init();
     while (ProcessMessage() == 0 && gp_Loop->Pad_Read() == FALSE)
     {
      
         ClearDrawScreen();//裏画面消す
         SetDrawScreen(DX_SCREEN_BACK);//描画先を裏画面に
 
+        gp_Loop->Update();
+        gp_Loop->Draw();
 
 
         ScreenFlip();//裏画面を表画面にコピー

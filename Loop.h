@@ -1,9 +1,12 @@
 #pragma once
 namespace
 {
-	int STAGE_TOTAL_Num =  3600;
+	int STAGE_TOTAL_Num =  1600;
 	int STAGE_WIDTH_Num =  160;
-	int STAGE_HEIGHT_Num = 18;
+	int STAGE_HEIGHT_Num = 10;
+	constexpr int MAP_CHIP_SIZE = 36;
+	constexpr int Move_X = 5;
+	constexpr int Move_Max_Y = 150;
 
 	struct Color
 	{
@@ -67,6 +70,7 @@ namespace
 		int Width;
 		int Height;
 		int k;
+		bool d;
 		double r;
 		s_Image Handle[e_Ani::e_Ani_Total];
 		int Animation;
@@ -80,6 +84,14 @@ namespace
 		int x;
 		int y;
 	};
+
+	enum e_Jump
+	{
+		e_Land,
+		e_Jumping,
+		e_Fall
+	};
+
 }
 
 
@@ -89,7 +101,20 @@ class Loop
 private:
 	int m_Pad_Inp{ 0 };
 	int m_Pad_Count[e_But::But_Total];
+	int m_Camera_x{ 0 };
+	int m_Player_x{ 0 };
+	int m_Plyer_i{ 0 };
+	int Jump_State{ 0 };
+	int Jump_Ymem{ 0 };
+	int Animation_Count{ 0 };
 	s_Text** m_Stage{0};
+	s_Rect* m_Block{ 0 };
+	s_Rect* m_Player{ 0 };
+	void Player_Copy();
+	bool HitJudg(s_Rect c, int i_c, bool d);
+	void Block_Init(s_Rect* m_rect);
+
+
 public:
 	void Init();
 	void Update();
