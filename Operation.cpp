@@ -11,6 +11,7 @@ namespace
         else if (A < 0) return -1;
         else return 0;
     }
+    int old_stage_num = { 0 };
 }
 void Operation::Init()
 {
@@ -21,15 +22,20 @@ void Operation::Init()
     m_Player_Data_L[0] = LoadGraph("./Data/test_Data/mgirl1_L.png");
     m_Player_Data_L[1] = LoadGraph("./Data/test_Data/mgirl2_L.png");
     m_Player_Data_L[2] = LoadGraph("./Data/test_Data/mgirl3_L.png");
+    
 }
 
-void Operation::Update(int * Scroll,  unsigned int m_Map_Data[Map_Y][Map_X], Keyboard* Key)
+
+void Operation::Update(int * Scroll,  unsigned int m_Map_Data[Map_Y][Map_X], Keyboard* Key, int& Stage_Num)
 {
+    
 
     anim_Sleep += 6.0f;
+
+
     if (Key->KeyDown(KEY_INPUT_LEFT)) {
 
-        if(Plxp > -32) Plxp = -3;
+        if(Plxp > -32) Plxp = -2;
         plDir = true;
        
         if (plAni <= 2)
@@ -47,7 +53,7 @@ void Operation::Update(int * Scroll,  unsigned int m_Map_Data[Map_Y][Map_X], Key
     }
 
     else if (Key->KeyDown(KEY_INPUT_RIGHT)) {
-        if (Plxp < 32) Plxp = 3;
+        if (Plxp < 32) Plxp = 2;
         plDir = false;
       
         if (plAni <= 2)
@@ -81,14 +87,8 @@ void Operation::Update(int * Scroll,  unsigned int m_Map_Data[Map_Y][Map_X], Key
             Plxp = 0;
             break;
         }
-        if (Plx <= g_WIN_WIDTH - 150)
-        {
-            Plx += lr;
-        }
-        else
-        {
-            m_Scroll -= lr;
-        }
+        
+        Plx += lr;
         loop--;
     }
 
@@ -165,8 +165,36 @@ void Operation::Update(int * Scroll,  unsigned int m_Map_Data[Map_Y][Map_X], Key
         loop--;
     }
 
+    //if (Ply > g_WIN_HEIGHT) Ply = 0;
+
+    if (Ply > g_WIN_HEIGHT) exit(1);//åäÇ…óéÇøÇΩ
+
+    
+    //ñÇñ@è≠èóÇÃà íuÇ…âΩÇ™Ç†ÇÈÇ©í≤Ç◊ÇÈ
+    /*int cx = int(Plx / Map_Chip_Size);
+    int cy = int(Ply / Map_Chip_Size);
+    int chip = 0;
+    if (0 <= cx && cx < 150 && 0 <= cy && cy < 9) chip = m_Map_Data[cy][cx];
+    if (chip == 3) InitVar();
+    if(chip == 4)  InitVar();//ìGÇ…êGÇÍÇÈ
+    if (chip == 5) {//ÉSÅ[ÉãÉhÉpÅ[ÉãÇéÊÇÈ
+        m_Map_Data[cy][cx] = 0;
+    }
+    if (Ply > g_WIN_HEIGHT) exit(1);//åäÇ…óéÇøÇΩ
+    if (chip == 6)//Plx > Map_Chip_Size * 149)
+    {
+        InitVar();
+        Stage_Num += 1;//ÉSÅ[ÉãÇµÇΩ
+    }*/
     //Ply += Plyp;
 
+    
+    /*if (Stage_Num != old_stage_num)
+    {
+        InitVar();
+    }
+
+     old_stage_num = Stage_Num;*/
 }
 
 void Operation::Draw()
@@ -176,34 +204,34 @@ void Operation::Draw()
     {
         if (plAni == 0)
         {
-            DrawGraph(Plx, Ply, m_Player_Data_L[0], TRUE);
+            DrawGraph(cx, cy, m_Player_Data_L[0], TRUE);
         }
 
         if (plAni == 1)
         {
-            DrawGraph(Plx, Ply, m_Player_Data_L[1], TRUE);
+            DrawGraph(cx, cy, m_Player_Data_L[1], TRUE);
         }
 
         if (plAni == 2)
         {
-            DrawGraph(Plx, Ply, m_Player_Data_L[2], TRUE);
+            DrawGraph(cx, cy, m_Player_Data_L[2], TRUE);
         }
     }
     else
     {
         if (plAni == 0)
         {
-            DrawGraph(Plx, Ply, m_Player_Data[0], TRUE);
+            DrawGraph(cx, cy, m_Player_Data[0], TRUE);
         }
 
         if (plAni == 1)
         {
-            DrawGraph(Plx, Ply, m_Player_Data[1], TRUE);
+            DrawGraph(cx, cy, m_Player_Data[1], TRUE);
         }
 
         if (plAni == 2)
         {
-            DrawGraph(Plx, Ply, m_Player_Data[2], TRUE);
+            DrawGraph(cx, cy, m_Player_Data[2], TRUE);
         }
     }
 }
@@ -212,14 +240,36 @@ int Wall[7] = { 0, 1, 1, 0, 0, 0, 0 };
 bool Operation::chkWall(int cx, int cy, unsigned int m_Map_Data[Map_Y][Map_X])
 {
     bool c = false;
-    if (cx < 0 || 150 * Map_Chip_Size < cx) c = true;
+    if (cx < 0 || 149 * Map_Chip_Size < cx) c = true;
     for (int i = 0; i < 4; ++i)
     {
-        int x = (cx + CXP[i]) / Map_Chip_Size;
-        int y = (cy + CYP[i]) / Map_Chip_Size;
+        int x = int((cx + CXP[i]) / Map_Chip_Size);
+        int y = int((cy + CYP[i]) / Map_Chip_Size);
         if (0 <= x && x <= 149 && 0 <= y && y <= 9) {
             if (Wall[m_Map_Data[y][x]] == 1) c = true;
+            if (m_Map_Data[y][x] == 3)  exit(1);
+            if (m_Map_Data[y][x] == 4)  exit(1);//ìGÇ…êGÇÍÇÈ
+            if (m_Map_Data[y][x] == 5) {//ÉSÅ[ÉãÉhÉpÅ[ÉãÇéÊÇÈ
+                m_Map_Data[y][x] = 0;
+            }
+           
+            if (m_Map_Data[y][x] == 6)//Plx > Map_Chip_Size * 149)
+            {
+                InitVar();
+                //Stage_Num += 1;//ÉSÅ[ÉãÇµÇΩ
+            }
         }
     }
     return c;
+}
+
+void Operation::InitVar(void)
+{
+    Plx = 0;
+    Ply = 0;
+    Plxp = 0;
+    Plyp = 0;
+    plJump = 0;
+    plDir = 0;
+    plAni = 0;
 }

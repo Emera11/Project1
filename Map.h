@@ -1,5 +1,8 @@
 #pragma once
 #include "./Global.h"
+class Keyboard;
+class Operation;
+
 namespace
 {
 	
@@ -15,13 +18,15 @@ private:
 	int m_Map_BackGraound{0};
 	
 	void Set_Map();
+
 public:
+	int m_Stage_Num{ 0 };
 	unsigned int m_Map_Data[Map_Y][Map_X]{ 0 };
 	Map();
 	~Map();
 	int scroll{ 0 };
 	void Init();
-	void Update();
-	void Render(int Plx, int Ply, int scroll);
+	void Update(Keyboard* Key);
+	void Render(int Plx, int Ply, int &cx, int& cy);
 };
 

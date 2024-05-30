@@ -1,9 +1,7 @@
 #include <DxLib.h>
 #include <math.h>
 #include "Global.h"
-#include "Map.h"
-#include "Operation.h"
-#include "./Header/Keyboard.h"
+#include "ALL_Game.h"
 
 const char* g_TITLE = "Untitled";
 
@@ -26,12 +24,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
   
 
     if (DxLib_Init() == -1) { return -1; }
-
-    Map* MAP = new Map();
-    Operation* OPERATION = new Operation(16, 16);
-    Keyboard* KEY = new Keyboard();
-    MAP->Init();
-    OPERATION->Init();
+    ALL_Game* Game = new ALL_Game();
+    Game->Init();
   
 
     while (ProcessMessage() == 0)
@@ -40,15 +34,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
         ClearDrawScreen();//裏画面消す
         SetDrawScreen(DX_SCREEN_BACK);//描画先を裏画面に
 
-        KEY->KeyUpdate();
-   
-        MAP->Update();
-        MAP->Render(OPERATION->Plx, OPERATION->Ply, OPERATION->m_Scroll);
-        OPERATION->Update(&MAP->scroll, MAP->m_Map_Data, KEY);
-        OPERATION->Draw();
+        Game->Update();
+        Game->Draw();
 
         ScreenFlip();//裏画面を表画面にコピー
-        if (CheckHitKey(KEY_INPUT_ESCAPE) == 1) { break; }
         
         
     }

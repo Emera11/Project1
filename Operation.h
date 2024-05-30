@@ -14,20 +14,24 @@ private:
 	double Plxp{ 0.0f };
 	double Plyp{ 0.0f };
 	int plJump{ 2 };
-	int CXP[4]{ 1, 35, 1, 35 };
+	int CXP[4]{ 10, 25, 10, 25 };
 	int CYP[4]{ 1, 1, 35, 35 };
 	int m_Player_Data[3]{ 0 };
 	int m_Player_Data_L[3]{ 0 };
+
 	bool chkWall(int cx, int cy, unsigned int m_Map_Data[Map_Y][Map_X]);
 public:
+	void InitVar(void);
 	int Plx{ 0 };
 	int Ply{ 0 };
+	int cx{ 0 }; 
+	int cy{0};
 	int m_Scroll{ 0 };
 	Operation(int x, int y) :Plx(x), Ply(y) {
 	
 	};
 	void Init();
-	void Update(int* Scroll, unsigned int m_Map_Data[Map_Y][Map_X], Keyboard* Key);
+	void Update(int* Scroll, unsigned int m_Map_Data[Map_Y][Map_X], Keyboard* Key, int& Stage_Num);
 	void Draw();
 };
 
